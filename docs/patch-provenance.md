@@ -67,11 +67,17 @@ the original upstream patch artifact: its hunk is generated against Fedora
 metadata. Those omissions are preserved rather than retroactively adding
 attribution trailers to a headerless local adaptation.
 
-## Verification still required
+## Remaining provenance notes
 
-- Confirm the merge status for Patchwork IDs 27775, 27776, 27777, and 26747
-  before publication; the canonical discussion URLs are now recorded above.
-- Identify who performed the local adaptations in patches 0003 and 0005.
-- Confirm who performed the AGC adaptation and whether an additional sign-off is
-  appropriate; do not add one without that person's approval.
-- Verify Fedora source-package reuse terms for the spec and packaging assets.
+- The exact person who performed the local Fedora 0.7.1 adaptation in patch
+  0003 is not recorded.
+- The exact person who regenerated or adapted patch 0005 for Fedora 0.7.1 is
+  not recorded.
+- No additional `Signed-off-by` should be added retroactively without
+  identifying and obtaining approval from the actual adapter.
+- The upstream merge status of Patchwork IDs 27775, 27776, 27777, and 26747
+  should be monitored over time because this repository may become unnecessary
+  as the fixes land upstream.
+
+Fedora packaging licensing and provenance are documented in
+`LICENSES/README.md`.
