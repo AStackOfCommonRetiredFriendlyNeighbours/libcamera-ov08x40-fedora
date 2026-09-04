@@ -1,0 +1,117 @@
+From patchwork Sun Aug 16 20:42:59 2026
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: James Alexander <opensource@inspiredexperts.com>
+X-Patchwork-Id: 27777
+Return-Path: <libcamera-devel-bounces@lists.libcamera.org>
+X-Original-To: parsemail@patchwork.libcamera.org
+Delivered-To: parsemail@patchwork.libcamera.org
+Received: from lancelot.ideasonboard.com (lancelot.ideasonboard.com
+	[92.243.16.209])
+	by patchwork.libcamera.org (Postfix) with ESMTPS id A8FF5C3303
+	for <parsemail@patchwork.libcamera.org>;
+	Mon, 17 Aug 2026 07:30:16 +0000 (UTC)
+Received: from lancelot.ideasonboard.com (localhost [IPv6:::1])
+	by lancelot.ideasonboard.com (Postfix) with ESMTP id 0150D681A2;
+	Mon, 17 Aug 2026 09:30:13 +0200 (CEST)
+Authentication-Results: lancelot.ideasonboard.com; dkim=pass (1024-bit key;
+	unprotected) header.d=inspiredexperts.com
+	header.i=@inspiredexperts.com header.b="OeS1sjc6";
+	dkim-atps=neutral
+Received: from s1.inspiredexperts.com (s1.inspiredexperts.com
+	[162.243.156.162])
+	by lancelot.ideasonboard.com (Postfix) with ESMTPS id 3D82A6819C
+	for <libcamera-devel@lists.libcamera.org>;
+	Sun, 16 Aug 2026 22:43:04 +0200 (CEST)
+Received: from localhost (s1.inspiredexperts.com [127.0.0.1])
+	by s1.inspiredexperts.com (Postfix) with ESMTP id 949B6D2D68D
+	for <libcamera-devel@lists.libcamera.org>;
+	Sun, 16 Aug 2026 14:43:02 -0600 (MDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inspiredexperts.com;
+	s=default; t=1786912982;
+	bh=i1mjAgpSe74lM7Bvaruifs5jKsDxF4vUiWac9PJ4bD0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=OeS1sjc61wDOW2mTEETiqCkmwpQT/2HDD4xTGX4ka98eBsR5Bavu1zg2VHk6u/wwF
+	ERD7Q6BSJNpyhYzkveZFo5z3JT3j90fWVPU8ISJP5lMaj9p/mPQDBTY8Fn30tNJkVW
+	3UJogF3vqPMvEuPrnPg5Tfvku5sVUpdEFAGqskSE=
+From: James Alexander <opensource@inspiredexperts.com>
+To: libcamera-devel@lists.libcamera.org
+Subject: [PATCH 3/3] ipa: simple: Add OV08X40 tuning
+Date: Sun, 16 Aug 2026 14:42:59 -0600
+Message-ID: <20260816204259.2845517-4-opensource@inspiredexperts.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260816204259.2845517-1-opensource@inspiredexperts.com>
+References: <20260816204259.2845517-1-opensource@inspiredexperts.com>
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	s1.inspiredexperts.com
+X-Mailman-Approved-At: Mon, 17 Aug 2026 09:30:05 +0200
+X-BeenThere: libcamera-devel@lists.libcamera.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: <libcamera-devel.lists.libcamera.org>
+List-Unsubscribe: <https://lists.libcamera.org/options/libcamera-devel>,
+	<mailto:libcamera-devel-request@lists.libcamera.org?subject=unsubscribe>
+List-Archive: <https://lists.libcamera.org/pipermail/libcamera-devel/>
+List-Post: <mailto:libcamera-devel@lists.libcamera.org>
+List-Help: <mailto:libcamera-devel-request@lists.libcamera.org?subject=help>
+List-Subscribe: <https://lists.libcamera.org/listinfo/libcamera-devel>,
+	<mailto:libcamera-devel-request@lists.libcamera.org?subject=subscribe>
+Errors-To: libcamera-devel-bounces@lists.libcamera.org
+Sender: "libcamera-devel" <libcamera-devel-bounces@lists.libcamera.org>
+
+Add the ov08x40 tuning used on the HP Spectre test system and install it
+with the other simple IPA data.
+
+The matrix and image controls reduce a green-yellow cast and keep webcam
+exposure and gain within practical limits on that machine. The tuning was
+tested under warm indoor lighting but is not lab calibrated.
+
+Build-tested against libcamera base b8910c9a4961 and hardware-tested as part of
+the complete patch set on the target HP Spectre.
+
+Signed-off-by: James Alexander <opensource@inspiredexperts.com>
+
+diff --git a/src/ipa/simple/data/meson.build b/src/ipa/simple/data/meson.build
+index 92795ee..d994100 100644
+--- a/src/ipa/simple/data/meson.build
++++ b/src/ipa/simple/data/meson.build
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: CC0-1.0
+ 
+ conf_files = files([
++    'ov08x40.yaml',
+     'uncalibrated.yaml',
+ ])
+ 
+diff --git a/src/ipa/simple/data/ov08x40.yaml b/src/ipa/simple/data/ov08x40.yaml
+new file mode 100644
+index 0000000..aa1b8e0
+--- /dev/null
++++ b/src/ipa/simple/data/ov08x40.yaml
+@@ -0,0 +1,22 @@
++# SPDX-License-Identifier: CC0-1.0
++%YAML 1.1
++---
++version: 1
++algorithms:
++  - BlackLevel:
++  - Awb:
++  - Ccm:
++      ccms:
++        - ct: 3050
++          ccm: [ 1.12, -0.08, -0.04,
++                -0.05,  1.00,  0.05,
++                -0.02, -0.10,  1.12 ]
++          offsets: [ 0, 0, 0 ]
++  - Adjust:
++      contrast: 1.15
++      gamma: 2.2
++  - Agc:
++      target: 2.3
++      maxAnalogueGain: 3.0
++      maxExposureTimeMs: 33.0
++...

@@ -1,0 +1,15 @@
+*.rpm
+*.src.rpm
+*.tar.*
+rpmbuild/
+build/
+build-*/
+*.log
+*.rej
+*.orig
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+.DS_Store
