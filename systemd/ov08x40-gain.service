@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: MIT
+[Unit]
+Description=Set OV08X40 camera digital gain to unity
+Before=wireplumber.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/libexec/ov08x40-gain
+RemainAfterExit=yes
+TimeoutStartSec=25
+
+[Install]
+WantedBy=default.target

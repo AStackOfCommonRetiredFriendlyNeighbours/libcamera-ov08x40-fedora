@@ -1,0 +1,32 @@
+#!/usr/bin/python3
+# SPDX-License-Identifier: MIT
+"""Set unity digital gain on OV08X40; leave other sensors untouched."""
+import pathlib
+import subprocess
+import sys
+import shutil
+import time
+
+if not shutil.which('v4l2-ctl'):
+    sys.exit('Missing v4l2-ctl: install v4l-utils.')
+
+# Device permissions may arrive shortly after the user manager starts.
+for attempt in range(20):
+    for entry in pathlib.Path('/sys/class/video4linux').glob('v4l-subdev*'):
+        try:
+            name = (entry / 'name').read_text().strip()
+        except OSError:
+            continue
+        if not name.startswith('ov08x40 '):
+            continue
+        device = '/dev/' + entry.name
+        result = subprocess.run(
+            ['/usr/bin/v4l2-ctl', '-d', device, '--set-ctrl=digital_gain=1024'],
+            capture_output=True, text=True,
+        )
+        if result.returncode == 0:
+            print(f'{name}: digital gain set to 1x (1024) on {device}', flush=True)
+            sys.exit(0)
+    time.sleep(1)
+print('Could not set OV08X40 digital gain; check sensor availability and permissions.', file=sys.stderr)
+sys.exit(1)

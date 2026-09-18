@@ -38,6 +38,26 @@ The RPM keeps Fedora's 0.7.1 packaging and applies five patches in order:
 Full attribution and uncertainty are in
 [docs/patch-provenance.md](docs/patch-provenance.md).
 
+## Reproduce the latest tested result
+
+The RPM backport alone is not the final camera setup. Follow
+[the complete reproduction guide](docs/reproduce-results.md) to build/install
+hpfix2, apply the September 18 user profile, enable 1× digital gain at login,
+and verify or undo the result. Existing hpfix2 users can skip rebuilding and run:
+
+```bash
+sudo dnf install python3-pyyaml v4l-utils
+./scripts/install-user-fix.py --dry-run
+./scripts/install-user-fix.py
+```
+
+Close camera apps/calls first: installation restarts WirePlumber. The installer
+backs up affected files and preserves unrelated libcamera configuration keys.
+The final profile reduced the yellow-green cast and grain on the tested machine,
+with a darker image from lower gain. Its colour matrix is specific to the tested
+indoor scene; identical results on other hardware or lighting are not promised.
+The login service is not a resume/hotplug watcher; see the guide for reapplying it.
+
 ## Build
 
 Install RPM build tooling and the spec's build dependencies. On Fedora, the
@@ -83,7 +103,8 @@ rpm -qa 'libcamera*' 'python3-libcamera' | sort
 ```
 
 Positive indicators include a node such as `ov08x40 [libcamera]` and a message
-like `Using tuning file .../ov08x40.yaml`; exact output varies. Some kernel or
+like `Using tuning file .../ov08x40.yaml`; with the final user profile, this
+should be the user configuration path, not the RPM’s `/usr/share` path. Some kernel or
 static sensor-property warnings remained during testing.
 
 Image quality from libcamera improved substantially on the tested machine.

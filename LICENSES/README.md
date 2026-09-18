@@ -21,6 +21,8 @@ Paths and globs below are relative to the repository root.
 | --- | --- | --- |
 | `README.md` | MIT | Original repository material. |
 | `docs/*.md` | MIT | Original repository documentation. Upstream facts and attribution recorded in these files do not transfer ownership of upstream work. |
+| `scripts/*.py`, `scripts/ov08x40-gain`, `systemd/*.service`, `tests/*.py` | MIT | Local user-profile installer and digital-gain service/helper. |
+| `config/ov08x40.yaml` | CC0-1.0 | Local adaptation of patch 0004; see `docs/patch-provenance.md`. |
 | `scripts/*.sh` | MIT | Original repository build and installation tooling. |
 | `.github/**/*.md` | MIT | Original repository issue and pull-request templates. |
 | `.gitignore` | MIT | Original repository material. |

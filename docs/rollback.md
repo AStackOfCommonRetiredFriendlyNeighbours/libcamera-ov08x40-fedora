@@ -1,5 +1,9 @@
 # Rollback
 
+If you installed the final user profile, first follow its
+[rollback instructions](reproduce-results.md#undo-just-this-user-profile).
+RPM rollback does not remove user tuning or disable the digital-gain service.
+
 Close camera applications before rollback. The custom libcamera subpackages use
 exact-version dependencies, so restore the installed package set together.
 

@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: CC0-1.0
+%YAML 1.1
+---
+# Local first-pass tuning from the 2026-09-18 indoor camera sample.
+# Derived from patches/0004-ov08x40-spectre-tuning.patch; see docs/patch-provenance.md.
+version: 1
+algorithms:
+  - BlackLevel:
+  - Awb:
+  - Ccm:
+      ccms:
+        - ct: 3050
+          ccm: [ 1.1648, -0.0832, -0.0416,
+                -0.0470,  0.9400,  0.0470,
+                -0.0270, -0.1350,  1.5120 ]
+  - Adjust:
+      contrast: 1.20
+      gamma: 2.1
+  - Agc:
+      target: 2.1
+      maxAnalogueGain: 3.0
+      maxExposureTimeMs: 40.0
+...

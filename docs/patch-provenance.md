@@ -81,3 +81,16 @@ attribution trailers to a headerless local adaptation.
 
 Fedora packaging licensing and provenance are documented in
 `LICENSES/README.md`.
+
+## September 18 local runtime profile
+
+`config/ov08x40.yaml` derives from the CC0 tuning in patch 0004. It records a
+subsequent local, photograph-guided adjustment: CCM rows scaled by 1.04, 0.94,
+and 1.35 respectively, contrast 1.20, gamma 2.1, AGC target 2.1, maximum analogue
+gain 3.0 and maximum exposure 40 ms. The earlier live installation had raised
+maximum analogue gain to 6.0. These changes are local tuning, not an upstream
+submission or laboratory calibration; patch 0004 and its attribution are intact.
+
+The new helper/service set the OV08X40 digital gain control to 1024 (unity).
+The user confirmed improved results, but update causality was not established.
+See [the reproduction guide](reproduce-results.md) for exact scope and limitations.

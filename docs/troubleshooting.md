@@ -72,3 +72,17 @@ machine and are not calibrated for every module. Compare a direct libcamera
 client with browser/conferencing output: those applications may add processing,
 scaling, or compression. Remaining static-properties or kernel warnings do not
 necessarily mean the tuning file was skipped.
+
+## Final profile does not load or digital gain resets
+
+Use [the reproduction guide](reproduce-results.md#3-verify) to check the selected
+user tuning path and actual digital gain. The final profile requires the backport;
+copying YAML onto an unpatched libcamera may not implement its AGC/Adjust controls.
+`LIBCAMERA_IPA_CONFIG_PATH` or `LIBCAMERA_SIMPLE_TUNING_FILE` environment overrides
+can take precedence over the configured search path. Existing CPU overrides are
+preserved by the installer but were not needed for the tested result.
+
+The oneshot service may fail if the sensor is missing, permissions are unavailable,
+or v4l-utils is absent. Inspect `journalctl --user -u ov08x40-gain.service -b`.
+Run the installer inside the desktop session, not via sudo or an unrelated SSH
+session. Reapply the service after any device reset that restores digital gain.
